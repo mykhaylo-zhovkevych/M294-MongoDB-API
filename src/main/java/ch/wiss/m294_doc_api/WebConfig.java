@@ -1,4 +1,4 @@
-package ch.wiss.wiss_quiz;
+package ch.wiss.m294_doc_api;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
