@@ -16,7 +16,7 @@ Die *CORS*-Konfiguration ist für beliebige URLs und Ports frei.
 
 ## Api-Documentation
 
-* Basis-URL: <http:localhost:8080/{your-collection}/documents>
+* Basis-URL: <http://localhost:8080/{your-collection}/documents>
 * *{your-collection}* ist ein beliebiger, selbstgewählter Name deiner *collection*, beispielsweise:
 
   * *contacts* für Kontakte
