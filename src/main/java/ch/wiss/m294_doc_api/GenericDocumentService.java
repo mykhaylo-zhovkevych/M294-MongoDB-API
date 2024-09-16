@@ -25,15 +25,14 @@ public class GenericDocumentService {
         return Optional.ofNullable(mongoTemplate.findById(id, GenericDocument.class, collectionName));
     }
 
-    public int deleteById(String collectionName, String id) {
-        Optional<GenericDocument> doc = findById(collectionName, id);
-        if (doc.isEmpty()) {
-            System.out.println("Document not found for deletion: " + id);
-            return 0; // Return 0 to indicate failure
+    public boolean deleteById(String collectionName, String id) {
+ 
+        GenericDocument document = mongoTemplate.findById(id, GenericDocument.class, collectionName);
+        if (document != null) {
+            mongoTemplate.remove(document, collectionName);
+            return true;  // Return true if document is found and deleted
         }
-        mongoTemplate.remove(doc.get(), collectionName);
-        System.out.println("Document deleted: " + id);
-        return 1; // Return 1 to indicate success
+        return false;  // Return false if document is not found
     }
 }
 
