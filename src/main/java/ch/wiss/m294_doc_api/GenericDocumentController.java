@@ -1,6 +1,7 @@
 package ch.wiss.m294_doc_api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,13 +19,15 @@ public class GenericDocumentController {
         return genericDocumentService.save(collectionName, document);
     }
 
-    @PutMapping("/{id}") // <- Stelle sicher, dass dieser Pfad vorhanden ist
-    public GenericDocument updateDocument(@PathVariable String collectionName, @PathVariable String id, @RequestBody GenericDocument document) {
-        if (document.getId() == null) {
-            throw new IllegalArgumentException("Document ID must not be null");
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateDocument(@PathVariable String collectionName, @PathVariable String id, @RequestBody GenericDocument document) {
+        if (document.getId() == null || !document.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("Document ID in the request body must match the ID in the URL.");
         }
-        document.setId(id); // Ensure the ID is set in the document
-        return genericDocumentService.save(collectionName, document);
+        return genericDocumentService.updateById(collectionName, id, document)
+                .map(updatedDocument -> ResponseEntity.ok(updatedDocument)) // 200 OK with updated document
+                .orElse(ResponseEntity.notFound().build()); // 404 Not Found if document does not exist
     }
 
     @GetMapping
@@ -48,5 +51,8 @@ public class GenericDocumentController {
             return ResponseEntity.notFound().build(); // 404 Not Found, wenn kein Dokument gefunden wurde
         }
     }
+
+
+    
 }
 
