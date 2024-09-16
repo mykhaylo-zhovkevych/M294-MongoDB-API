@@ -25,7 +25,12 @@ public class GenericDocumentService {
         return Optional.ofNullable(mongoTemplate.findById(id, GenericDocument.class, collectionName));
     }
 
-    public void deleteById(String collectionName, String id) {
-        mongoTemplate.remove(mongoTemplate.findById(id, GenericDocument.class, collectionName));
+    public int deleteById(String collectionName, String id) {
+        Optional<GenericDocument> doc = findById(collectionName, id);
+        if (doc.isEmpty()) {
+            return -1;
+        }
+        mongoTemplate.remove(doc.get(), collectionName);
+        return 1;
     }
 }

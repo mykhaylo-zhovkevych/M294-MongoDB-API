@@ -39,8 +39,8 @@ public class GenericDocumentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDocument(@PathVariable String collectionName, @PathVariable String id) {
-        genericDocumentService.deleteById(collectionName, id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Integer> deleteDocument(@PathVariable String collectionName, @PathVariable String id) {
+        int result = genericDocumentService.deleteById(collectionName, id);
+        return ResponseEntity.status(result == 1 ? 200 : 404).body(result);
     }
 }
