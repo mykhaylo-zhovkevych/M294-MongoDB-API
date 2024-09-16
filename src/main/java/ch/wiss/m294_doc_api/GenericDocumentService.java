@@ -28,12 +28,12 @@ public class GenericDocumentService {
     public int deleteById(String collectionName, String id) {
         Optional<GenericDocument> doc = findById(collectionName, id);
         if (doc.isEmpty()) {
-            System.out.println("Document not found for deletion");
-            return -1;
+            System.out.println("Document not found for deletion: " + id);
+            return 0; // Return 0 to indicate failure
         }
         mongoTemplate.remove(doc.get(), collectionName);
         System.out.println("Document deleted: " + id);
-        return 1;
+        return 1; // Return 1 to indicate success
     }
-    
 }
+
