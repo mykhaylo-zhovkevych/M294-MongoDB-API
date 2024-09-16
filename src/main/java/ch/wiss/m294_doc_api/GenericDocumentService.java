@@ -14,7 +14,19 @@ public class GenericDocumentService {
     private MongoTemplate mongoTemplate;
 
     public GenericDocument save(String collectionName, GenericDocument document) {
-        return mongoTemplate.save(document, collectionName);
+        if (document.getId() != null) {
+            Optional<GenericDocument> existingDocument = findById(collectionName, document.getId());
+            if (existingDocument.isPresent()) {
+                // Update das existierende Dokument
+                mongoTemplate.save(document, collectionName);
+            } else {
+                throw new IllegalArgumentException("Document with ID not found for update.");
+            }
+        } else {
+            // Neues Dokument erstellen
+            mongoTemplate.insert(document, collectionName);
+        }
+        return document;
     }
 
     public List<GenericDocument> findAll(String collectionName) {
