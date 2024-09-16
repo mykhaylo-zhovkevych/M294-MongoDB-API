@@ -18,11 +18,12 @@ public class GenericDocumentController {
         return genericDocumentService.save(collectionName, document);
     }
 
-    @PutMapping
-    public GenericDocument updateDocument(@PathVariable String collectionName, @RequestBody GenericDocument document) {
+    @PutMapping("/{id}") // <- Stelle sicher, dass dieser Pfad vorhanden ist
+    public GenericDocument updateDocument(@PathVariable String collectionName, @PathVariable String id, @RequestBody GenericDocument document) {
         if (document.getId() == null) {
             throw new IllegalArgumentException("Document ID must not be null");
         }
+        document.setId(id); // Ensure the ID is set in the document
         return genericDocumentService.save(collectionName, document);
     }
 
@@ -44,3 +45,4 @@ public class GenericDocumentController {
         return ResponseEntity.status(result == 1 ? 200 : 404).body(result);
     }
 }
+
